@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CLIC SAC Review 2026 Deadlines</title>
+<style>
+  :root {
+    --ink: #1f2430;
+    --paper: #fdfaf3;
+    --line: #e4ddc9;
+
+    --budget: #845ef7;    --budget-bg: #f3efff;
+    --whitepaper: #4dabf7; --whitepaper-bg: #eef7ff;
+    --sac: #ff6b6b;        --sac-bg: #fff0f0;
+    --ntucam: #69db7c;     --ntucam-bg: #eefbf1;
+    --submission: #f06595; --submission-bg: #ffeef4;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 40px 20px;
+    background: var(--paper);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+  }
+  h1 {
+    text-align: center;
+    font-size: 26px;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #7a7566;
+    margin-bottom: 24px;
+    font-size: 14px;
+  }
+
+  .filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+  .filter-btn {
+    border: 2px solid var(--btn-color);
+    background: #fff;
+    color: var(--btn-color);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--btn-color);
+    color: #fff;
+  }
+  .filter-btn[data-cat="all"] { --btn-color: var(--ink); }
+  .filter-btn[data-cat="budget"] { --btn-color: var(--budget); }
+  .filter-btn[data-cat="whitepaper"] { --btn-color: var(--whitepaper); }
+  .filter-btn[data-cat="sac"] { --btn-color: var(--sac); }
+  .filter-btn[data-cat="ntucam"] { --btn-color: var(--ntucam); }
+  .filter-btn[data-cat="submission"] { --btn-color: var(--submission); }
+
+  table {
+    width: 100%;
+    max-width: 1250px;
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+  }
+  thead th {
+    text-align: left;
+    padding: 12px 14px;
+    background: var(--ink);
+    color: #fff;
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  thead th:first-child { border-radius: 10px 0 0 10px; }
+  thead th:last-child { border-radius: 0 10px 10px 0; }
+
+  tbody tr {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    background: var(--row-bg);
+    transition: opacity 0.2s ease;
+  }
+  tbody tr.hidden { display: none; }
+
+  tbody td {
+    padding: 14px;
+    background: var(--row-bg);
+    font-size: 13.5px;
+    line-height: 1.45;
+    vertical-align: top;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  tbody td:first-child {
+    border-left: 6px solid var(--row-color);
+    border-radius: 10px 0 0 10px;
+  }
+  tbody td:last-child {
+    border-radius: 0 10px 10px 0;
+  }
+
+  .cat-pill {
+    display: inline-block;
+    padding: 3px 11px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 11.5px;
+    color: #fff;
+    background: var(--row-color);
+    margin-bottom: 7px;
+  }
+  .task-text { font-weight: 600; display: block; }
+  .docs { color: #6b6656; font-style: italic; font-size: 13px; }
+  .doc-list {
+    margin: 0;
+    padding-left: 16px;
+    list-style-type: disc;
+  }
+  .doc-list li {
+    margin-bottom: 2px;
+  }
+  .docs-note {
+    font-weight: 700;
+    font-style: normal;
+    color: #c92a2a;
+    font-size: 12.5px;
+    margin-bottom: 4px;
+  }
+
+  .deadline-badge {
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    color: #c92a2a;
+    margin-bottom: 4px;
+  }
+  tr.hard-deadline {
+    outline: 2.5px solid #ff3b3b;
+    outline-offset: -2px;
+    box-shadow: 0 0 0 3px rgba(255,59,59,0.15), 0 2px 6px rgba(0,0,0,0.12);
+  }
+  tr.hard-deadline td:first-child {
+    border-left: 8px solid #ff3b3b;
+  }
+
+  .important-badge {
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    color: #b8860b;
+    margin-bottom: 4px;
+  }
+  tr.important {
+    outline: 2.5px solid #ffb800;
+    outline-offset: -2px;
+    box-shadow: 0 0 0 3px rgba(255,184,0,0.15), 0 2px 6px rgba(0,0,0,0.1);
+  }
+  tr.important td:first-child {
+    border-left: 8px solid #ffb800;
+  }
+
+  .date-pill {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 13px;
+    color: #fff;
+    background: var(--row-color);
+    white-space: nowrap;
+  }
+  .admin-pill {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    background: #fff;
+    color: var(--ink);
+    border: 1.5px solid var(--row-color);
+  }
+  .people {
+    color: #4a4638;
+  }
+
+  tr[data-cat="budget"]      { --row-color: var(--budget);      --row-bg: var(--budget-bg); }
+  tr[data-cat="whitepaper"]  { --row-color: var(--whitepaper);  --row-bg: var(--whitepaper-bg); }
+  tr[data-cat="sac"]         { --row-color: var(--sac);         --row-bg: var(--sac-bg); }
+  tr[data-cat="ntucam"]      { --row-color: var(--ntucam);      --row-bg: var(--ntucam-bg); }
+  tr[data-cat="submission"]  { --row-color: var(--submission);  --row-bg: var(--submission-bg); }
+
+  @media (max-width: 800px) {
+    table, thead, tbody, tr, td { display: block; width: 100%; }
+    thead { display: none; }
+    tbody tr {
+      margin-bottom: 16px;
+      border-radius: 10px;
+      padding: 12px;
+      border-left: 6px solid var(--row-color);
+    }
+    tbody td {
+      border: none;
+      padding: 6px 8px;
+      border-radius: 0 !important;
+    }
+    tbody td::before {
+      content: attr(data-label);
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #999;
+      margin-bottom: 2px;
+    }
+  }
+
+  .progress-wrap {
+    max-width: 500px;
+    margin: 0 auto 26px auto;
+    text-align: center;
+  }
+  .progress-bar {
+    width: 100%;
+    height: 10px;
+    background: #eee6d3;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #69db7c, #4dabf7);
+    transition: width 0.3s ease;
+  }
+  .progress-label {
+    margin-top: 6px;
+    font-size: 12.5px;
+    color: #7a7566;
+    font-weight: 600;
+  }
+
+  .done-cell { text-align: center; }
+  .check-wrap {
+    position: relative;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+  }
+  .check-wrap input {
+    position: absolute;
+    opacity: 0;
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    cursor: pointer;
+  }
+  .checkmark {
+    position: absolute;
+    top: 0; left: 0;
+    width: 24px;
+    height: 24px;
+    background: #fff;
+    border: 2px solid var(--row-color);
+    border-radius: 6px;
+    transition: all 0.15s ease;
+  }
+  .check-wrap input:checked ~ .checkmark {
+    background: var(--row-color);
+  }
+  .checkmark::after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 8px;
+    top: 3px;
+    width: 6px;
+    height: 12px;
+    border: solid #fff;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+  }
+  .check-wrap input:checked ~ .checkmark::after {
+    display: block;
+  }
+
+  tr.completed td {
+    opacity: 0.55;
+  }
+  tr.completed .task-text {
+    text-decoration: line-through;
+  }
+</style>
+</head>
+<body>
+
+<h1>CLIC SAC Review 2026 &mdash; Deadlines</h1>
+<div class="subtitle">Timeline: 20 August &ndash; 8 October 2026</div>
+
+<div class="progress-wrap">
+  <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+  <div id="progress-label" class="progress-label">0 of 32 tasks completed</div>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" data-cat="all">All</button>
+  <button class="filter-btn" data-cat="budget">Budget</button>
+  <button class="filter-btn" data-cat="whitepaper">Whitepaper</button>
+  <button class="filter-btn" data-cat="sac">SAC</button>
+  <button class="filter-btn" data-cat="ntucam">NTU CAM Meeting</button>
+  <button class="filter-btn" data-cat="submission">Submission to SAC</button>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Task</th>
+      <th>Documents</th>
+      <th>People Involved</th>
+      <th>Admin in Charge</th>
+      <th>Completed</th>
+    </tr>
+  </thead>
+  <tbody id="task-body">
+    <tr data-cat="budget" id="row-0">
+      <td data-label="Date"><span class="date-pill">20 Aug</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">Budget</span>
+        <span class="task-text">Follow up: Cambridge PI costing</span>
+      </td>
+      <td data-label="Documents" class="docs">Costing for Cambridge PIs time and residency</td>
+      <td data-label="People Involved" class="people">Elana</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="whitepaper" id="row-1">
+      <td data-label="Date"><span class="date-pill">24 Aug</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">Whitepaper</span>
+        <span class="task-text">Circulate Whitepaper to PIs for input</span>
+      </td>
+      <td data-label="Documents" class="docs">Whitepaper Draft</td>
+      <td data-label="People Involved" class="people">annabel, john, georgios, henriette, topun/vicky, michelle, chew lee, david</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="sac" id="row-2">
+      <td data-label="Date"><span class="date-pill">24 Aug</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">SAC</span>
+        <span class="task-text">Draft SAC agenda</span>
+      </td>
+      <td data-label="Documents" class="docs">Draft SAC Agenda</td>
+      <td data-label="People Involved" class="people">annabel, henriette, vicky, zoe</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="sac" id="row-3">
+      <td data-label="Date"><span class="date-pill">24 Aug</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">SAC</span>
+        <span class="task-text">Prepare SAC report (CLIC 1 progress)</span>
+      </td>
+      <td data-label="Documents" class="docs">clic 1 progress & 1 PPT slides draft</td>
+      <td data-label="People Involved" class="people">Research Fellows</td>
+      <td data-label="Admin"><span class="admin-pill">Restria</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="ntucam" id="row-4">
+      <td data-label="Date"><span class="date-pill">25 Aug</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">NTU CAM Meeting</span>
+        <span class="task-text">NTU CAM meeting: Whitepaper, SAC report, agenda</span>
+      </td>
+      <td data-label="Documents" class="docs">Whitepaper Draft, SAC report, Draft SAC Agenda</td>
+      <td data-label="People Involved" class="people">all PIs</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="sac" id="row-5">
+      <td data-label="Date"><span class="date-pill">31 Aug</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">SAC</span>
+        <span class="task-text">Circulate SAC report to PIs for input</span>
+      </td>
+      <td data-label="Documents" class="docs">Collated SAC Report</td>
+      <td data-label="People Involved" class="people">all PIs</td>
+      <td data-label="Admin"><span class="admin-pill">Restria</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="whitepaper" id="row-6">
+      <td data-label="Date"><span class="date-pill">31 Aug</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">Whitepaper</span>
+        <span class="task-text">2nd Whitepaper circulation to PIs for input</span>
+      </td>
+      <td data-label="Documents" class="docs">Whitepaper Draft</td>
+      <td data-label="People Involved" class="people">annabel, john, georgios, henriette, topun/vicky, michelle, chew lee, david</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="budget" id="row-7">
+      <td data-label="Date"><span class="date-pill">4 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">Budget</span>
+        <span class="task-text">Budget prep (Round 1)</span>
+      </td>
+      <td data-label="Documents" class="docs">Draft Budget with estimated total project value (TPV)</td>
+      <td data-label="People Involved" class="people">Annabel, Henriette, Liz</td>
+      <td data-label="Admin"><span class="admin-pill">Christine + Melvin</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="sac" id="row-8">
+      <td data-label="Date"><span class="date-pill">4 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">SAC</span>
+        <span class="task-text">Finalise & circulate SAC report to PIs</span>
+      </td>
+      <td data-label="Documents" class="docs">Collated SAC Report</td>
+      <td data-label="People Involved" class="people">all PIs</td>
+      <td data-label="Admin"><span class="admin-pill">Restria</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="whitepaper" id="row-9">
+      <td data-label="Date"><span class="date-pill">4 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">Whitepaper</span>
+        <span class="task-text">Finalise &amp; circulate Whitepaper draft to PIs (Round 1)</span>
+      </td>
+      <td data-label="Documents" class="docs">5 pages - Whitepaper Draft, Cambridge and NTU Team Members Names</td>
+      <td data-label="People Involved" class="people">all PIs</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="submission" id="row-10">
+      <td data-label="Date"><span class="date-pill">7 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">Submission to SAC</span>
+        <span class="task-text">Circulate Whitepaper draft to SAC members</span>
+      </td>
+      <td data-label="Documents" class="docs">5 pages Whitepaper Draft</td>
+      <td data-label="People Involved" class="people">-</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="submission" id="row-11">
+      <td data-label="Date"><span class="date-pill">7 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">Submission to SAC</span>
+        <span class="task-text">Circulate SAC report to SAC members</span>
+      </td>
+      <td data-label="Documents" class="docs">Collated SAC Report</td>
+      <td data-label="People Involved" class="people">-</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="sac" id="row-12">
+      <td data-label="Date"><span class="date-pill">7 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">SAC</span>
+        <span class="task-text">Share Draft SAC agenda with NRF</span>
+      </td>
+      <td data-label="Documents" class="docs">Draft SAC Agenda</td>
+      <td data-label="People Involved" class="people">NRF</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="whitepaper" id="row-13">
+      <td data-label="Date"><span class="date-pill">7 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">Whitepaper</span>
+        <span class="task-text">Discuss Whitepaper slides</span>
+      </td>
+      <td data-label="Documents" class="docs">Whitepaper Slides</td>
+      <td data-label="People Involved" class="people">annabel, john, georgios, henriette, topun/vicky, michelle, chew lee, david</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="whitepaper" id="row-14">
+      <td data-label="Date"><span class="date-pill">14 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">Whitepaper</span>
+        <span class="task-text">Finalise renewal team & Whitepaper slides</span>
+      </td>
+      <td data-label="Documents" class="docs">CVs of team members, Whitepaper Slides</td>
+      <td data-label="People Involved" class="people">annabel, john, georgios, henriette, topun/vicky, michelle, chew lee, david</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="whitepaper" id="row-15">
+      <td data-label="Date"><span class="date-pill">14 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">Whitepaper</span>
+        <span class="task-text">Collate SAC feedback on Whitepaper</span>
+      </td>
+      <td data-label="Documents" class="docs">Comments on CLIC Whitepaper Draft</td>
+      <td data-label="People Involved" class="people">-</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="whitepaper" id="row-16">
+      <td data-label="Date"><span class="date-pill">15 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">Whitepaper</span>
+        <span class="task-text">Circulate SAC comments to PIs</span>
+      </td>
+      <td data-label="Documents" class="docs">CLIC Whitepaper Draft</td>
+      <td data-label="People Involved" class="people">-</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="sac" id="row-17">
+      <td data-label="Date"><span class="date-pill">18 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">SAC</span>
+        <span class="task-text">Collate SAC slides</span>
+      </td>
+      <td data-label="Documents" class="docs">Draft SAC Slides</td>
+      <td data-label="People Involved" class="people">Research Fellows, all PIs</td>
+      <td data-label="Admin"><span class="admin-pill">Restria</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="whitepaper" id="row-18">
+      <td data-label="Date"><span class="date-pill">21 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">Whitepaper</span>
+        <span class="task-text">Discuss Whitepaper draft & slides</span>
+      </td>
+      <td data-label="Documents" class="docs">Whitepaper Slides, Whitepaper Draft</td>
+      <td data-label="People Involved" class="people">annabel, john, georgios, henriette, topun/vicky, michelle, chew lee, david</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="whitepaper" id="row-19">
+      <td data-label="Date"><span class="date-pill">21 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">Whitepaper</span>
+        <span class="task-text">Submit grant write-up (all members)</span>
+      </td>
+      <td data-label="Documents" class="docs">Write-up on ALL Related Grant(s)</td>
+      <td data-label="People Involved" class="people">all CLIC2 team members</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="sac" id="row-20">
+      <td data-label="Date"><span class="date-pill">21 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">SAC</span>
+        <span class="task-text">Circulate SAC slides to PIs for input</span>
+      </td>
+      <td data-label="Documents" class="docs">Draft SAC Slides, Draft SAC Agenda</td>
+      <td data-label="People Involved" class="people">all PIs</td>
+      <td data-label="Admin"><span class="admin-pill">Restria</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="whitepaper" id="row-21">
+      <td data-label="Date"><span class="date-pill">21 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">Whitepaper</span>
+        <span class="task-text">Circulate Whitepaper slides to PIs for input</span>
+      </td>
+      <td data-label="Documents" class="docs">Whitepaper Slides</td>
+      <td data-label="People Involved" class="people">all PIs</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="ntucam" id="row-22">
+      <td data-label="Date"><span class="date-pill">22 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">NTU CAM Meeting</span>
+        <span class="task-text">NTU CAM meeting: dry run of slides</span>
+      </td>
+      <td data-label="Documents" class="docs">Draft SAC Slides, Whitepaper Slides</td>
+      <td data-label="People Involved" class="people">all PIs</td>
+      <td data-label="Admin"><span class="admin-pill">Christine + Restria</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="sac" id="row-23">
+      <td data-label="Date"><span class="date-pill">23 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">SAC</span>
+        <span class="task-text">Share final SAC agenda with PIs, NRF and SAC Members</span>
+      </td>
+      <td data-label="Documents" class="docs">Final SAC Agenda</td>
+      <td data-label="People Involved" class="people">all PIs, NRF, SAC Members</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="whitepaper" id="row-24">
+      <td data-label="Date"><span class="date-pill">25 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">Whitepaper</span>
+        <span class="task-text">Whitepaper internal submission (Round 2)</span>
+      </td>
+      <td data-label="Documents" class="docs">
+        <div class="docs-note">All documents must be FINAL versions</div>
+        <ul class="doc-list">
+          <li>Application Form</li>
+          <li>Whitepaper</li>
+          <li>References</li>
+          <li>CVs of Team Members</li>
+          <li>Write-up on ALL Related Grant(s)</li>
+          <li>Slides</li>
+          <li>Letter of support from Stakeholders (eg. MOE, SEAB, Skillsfuture)</li>
+        </ul>
+      </td>
+      <td data-label="People Involved" class="people">-</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="whitepaper" id="row-25">
+      <td data-label="Date"><span class="date-pill">28 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">Whitepaper</span>
+        <span class="task-text">Budget internal submission (Round 2)</span>
+      </td>
+      <td data-label="Documents" class="docs">Final Budget</td>
+      <td data-label="People Involved" class="people">-</td>
+      <td data-label="Admin"><span class="admin-pill">Christine + Melvin</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="sac" id="row-26">
+      <td data-label="Date"><span class="date-pill">28 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">SAC</span>
+        <span class="task-text">SAC dry run</span>
+      </td>
+      <td data-label="Documents" class="docs">SAC Slides, Whitepaper Slides</td>
+      <td data-label="People Involved" class="people">Research Fellows, all PIs</td>
+      <td data-label="Admin"><span class="admin-pill">Christine + Restria</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="whitepaper" id="row-27" class="hard-deadline">
+      <td data-label="Date"><span class="date-pill">30 Sep</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">Whitepaper</span>
+        <span class="deadline-badge">⚠ HARD DEADLINE &mdash; IMPORTANT!</span>
+        <span class="task-text">Submit Whitepaper to NRF</span>
+      </td>
+      <td data-label="Documents" class="docs">
+        <ul class="doc-list">
+          <li>Application Form</li>
+          <li>Whitepaper</li>
+          <li>References</li>
+          <li>CVs of Team Members</li>
+          <li>Write-up on ALL Related Grant(s)</li>
+          <li>Slides</li>
+          <li>Budget</li>
+          <li>Supporting Letter from Stakeholders (eg. MOE, SEAB, Skillsfuture)</li>
+        </ul>
+      </td>
+      <td data-label="People Involved" class="people">-</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="sac" id="row-28">
+      <td data-label="Date"><span class="date-pill">1 Oct</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">SAC</span>
+        <span class="task-text">Finalise SAC slides</span>
+      </td>
+      <td data-label="Documents" class="docs">SAC Slides</td>
+      <td data-label="People Involved" class="people">Research Fellows, all PIs</td>
+      <td data-label="Admin"><span class="admin-pill">Restria</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="sac" id="row-29" class="important">
+      <td data-label="Date"><span class="date-pill">6 Oct</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">SAC</span>
+        <span class="important-badge">★ IMPORTANT</span>
+        <span class="task-text">SAC rehearsal (in-person)</span>
+      </td>
+      <td data-label="Documents" class="docs">SAC Slides, Whitepaper Slides</td>
+      <td data-label="People Involved" class="people">Research Fellows, all PIs</td>
+      <td data-label="Admin"><span class="admin-pill">Christine</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="sac" id="row-30" class="important">
+      <td data-label="Date"><span class="date-pill">7 Oct</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">SAC</span>
+        <span class="important-badge">★ IMPORTANT</span>
+        <span class="task-text">Full-day SAC review</span>
+      </td>
+      <td data-label="Documents" class="docs">-</td>
+      <td data-label="People Involved" class="people">Research Fellows, all PIs</td>
+      <td data-label="Admin"><span class="admin-pill">Christine + Restria + Melvin</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>
+    <tr data-cat="sac" id="row-31" class="important">
+      <td data-label="Date"><span class="date-pill">8 Oct</span></td>
+      <td data-label="Task">
+        <span class="cat-pill">SAC</span>
+        <span class="important-badge">★ IMPORTANT</span>
+        <span class="task-text">Closed-door SAC review (morning)</span>
+      </td>
+      <td data-label="Documents" class="docs">-</td>
+      <td data-label="People Involved" class="people">NRF, SAC, PIs</td>
+      <td data-label="Admin"><span class="admin-pill">Christine + Restria + Melvin</span></td>
+      <td data-label="Completed" class="done-cell">
+        <label class="check-wrap">
+          <input type="checkbox" class="done-checkbox" onchange="toggleDone(this)">
+          <span class="checkmark"></span>
+        </label>
+      </td>
+    </tr>  </tbody>
+</table>
+
+<script>
+  const buttons = document.querySelectorAll('.filter-btn');
+  const rows = document.querySelectorAll('#task-body tr');
+  const totalTasks = rows.length;
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.cat;
+      rows.forEach(row => {
+        if (cat === 'all' || row.dataset.cat === cat) {
+          row.classList.remove('hidden');
+        } else {
+          row.classList.add('hidden');
+        }
+      });
+    });
+  });
+
+  function updateProgress() {
+    const doneCount = document.querySelectorAll('.done-checkbox:checked').length;
+    const pct = totalTasks ? Math.round((doneCount / totalTasks) * 100) : 0;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-label').textContent = doneCount + ' of ' + totalTasks + ' tasks completed';
+  }
+
+  function toggleDone(checkbox) {
+    const row = checkbox.closest('tr');
+    row.classList.toggle('completed', checkbox.checked);
+    updateProgress();
+  }
+
+  updateProgress();
+</script>
+
+</body>
+</html>
